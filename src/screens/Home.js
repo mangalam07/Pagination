@@ -24,7 +24,7 @@ const Home = ({navigation}) => {
 
   // get images list
   const getImages = () => {
-    const url = 'http://dev3.xicom.us/xttest/getdata.php';
+    const url = 'https://dev3.xicom.us/xttest/getdata.php';
     const formdata = new FormData();
     formdata.append('user_id', '108');
     formdata.append('offset', offset);
@@ -44,6 +44,7 @@ const Home = ({navigation}) => {
 
   // helper
   const renderItem = item => {
+    console.log('item>>>', item);
     return (
       <TouchableOpacity
         style={styles.imageButton}
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 20,
-    backgroundColor: '#fff',
+    backgroundColor: 'lightblue',
   },
   image: {
     width: 320,
@@ -116,6 +117,6 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     width: '70%',
     alignSelf: 'center',
-    backgroundColor:'red'
-  }
+    backgroundColor: 'red',
+  },
 });

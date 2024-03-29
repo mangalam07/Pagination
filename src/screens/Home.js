@@ -13,8 +13,10 @@ import React, {useEffect, useState} from 'react';
 const Home = ({navigation}) => {
   // state
   const [userdata, setUserData] = useState([]);
+  const [alldata, setAllData] = useState([]);
   const [offset, setOffset] = useState(0);
 
+  console.log('all', alldata?.length == 45);
   // helper
   useEffect(() => {
     getImages();
@@ -38,13 +40,15 @@ const Home = ({navigation}) => {
 
     fetch(url, requestOptions)
       .then(response => response.json())
-      .then(result => setUserData(result?.images))
+      .then(result => {
+        setUserData(result?.images);
+        setAllData([...alldata, ...result?.images]);
+      })
       .catch(error => console.error(error));
   };
 
   // helper
   const renderItem = item => {
-    console.log('item>>>', item);
     return (
       <TouchableOpacity
         style={styles.imageButton}
@@ -57,17 +61,23 @@ const Home = ({navigation}) => {
   // helper
   const renderFooter = () => {
     return (
-      <TouchableOpacity
-        style={styles.loadmore}
-        onPress={() => handleLoadMore()}>
-        <Text
-          style={{
-            fontSize: 20,
-            color: '#fff',
-          }}>
-          Click here to load more
-        </Text>
-      </TouchableOpacity>
+      // {
+      alldata?.length == 45 ? (
+        <></>
+      ) : (
+        <TouchableOpacity
+          style={styles.loadmore}
+          onPress={() => handleLoadMore()}>
+          <Text
+            style={{
+              fontSize: 20,
+              color: '#fff',
+            }}>
+            Click here to load more
+          </Text>
+        </TouchableOpacity>
+      )
+      // }
     );
   };
 
@@ -79,9 +89,9 @@ const Home = ({navigation}) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={userdata}
+        data={alldata}
         renderItem={({item}) => renderItem(item)}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => index}
         ListFooterComponent={() => renderFooter()}
         onEndReachedThreshold={0}
         showsVerticalScrollIndicator={false}
@@ -102,8 +112,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightblue',
   },
   image: {
-    width: 320,
-    height: 170,
+    width: 360,
+    height: 180,
     marginBottom: 10,
     borderRadius: 10,
     resizeMode: 'cover', // Adjust as needed

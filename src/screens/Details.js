@@ -28,6 +28,7 @@ const Details = ({navigation, route}) => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (reg.test(item) === false) {
       console.log('Email is Not Correct');
+      setEmail();
       // setEmail(item);
       return false;
     } else {
@@ -41,8 +42,20 @@ const Details = ({navigation, route}) => {
     setLoading(true);
     const url = 'http://dev3.xicom.us/xttest/savedata.php';
 
-    if (!first || !last || !email || !phone || !route?.params?.xt_image) {
-      Alert.alert('Please fill out all fields');
+    if (!first?.length) {
+      Alert.alert('Please fill the First name');
+      setLoading(false);
+      return;
+    } else if (!last?.length) {
+      Alert.alert('Please fill the Last name');
+      setLoading(false);
+      return;
+    } else if (!email) {
+      Alert.alert('Please fill the Email');
+      setLoading(false);
+      return;
+    } else if (!phone?.length) {
+      Alert.alert('Please fill the Phone');
       setLoading(false);
       return;
     }
@@ -86,15 +99,15 @@ const Details = ({navigation, route}) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             source={require('../assets/goBack.png')}
-            style={{height: 19, width: 19,tintColor:'#000'}}
+            style={{height: 19, width: 19, tintColor: '#000'}}
           />
         </TouchableOpacity>
         <Text
           style={{
             fontSize: 20,
             textAlign: 'center',
-            marginRight:120,
-            color:'#000'
+            marginRight: 120,
+            color: '#000',
           }}>
           Detail Screen
         </Text>
@@ -102,13 +115,13 @@ const Details = ({navigation, route}) => {
 
       {/* image */}
       <Image source={{uri: imagePath}} style={styles.image} />
-        <View style={{marginVertical:10}}/>
+      <View style={{marginVertical: 10}} />
       {/* for first name */}
       <View style={styles.container}>
         <Text style={styles.head}>First name</Text>
         <TextInput
           value={first}
-          style={styles.inputtext}
+          style={[styles.inputtext, {borderColor: !first ? 'red' : 'green'}]}
           onChangeText={item => setFirst(item)}
         />
       </View>
@@ -118,7 +131,7 @@ const Details = ({navigation, route}) => {
         <Text style={styles.head}>Last name</Text>
         <TextInput
           value={last}
-          style={styles.inputtext}
+          style={[styles.inputtext, {borderColor: !last ? 'red' : 'green'}]}
           onChangeText={item => setLast(item)}
         />
       </View>
@@ -127,8 +140,9 @@ const Details = ({navigation, route}) => {
       <View style={styles.container}>
         <Text style={styles.head}>Email</Text>
         <TextInput
+          keyboardType="email-address"
           value={email}
-          style={styles.inputtext}
+          style={[styles.inputtext, {borderColor: !email ? 'red' : 'green'}]}
           onChangeText={item => handleEmail(item)}
         />
       </View>
@@ -137,9 +151,14 @@ const Details = ({navigation, route}) => {
       <View style={styles.container}>
         <Text style={styles.head}>Phone</Text>
         <TextInput
+          keyboardType="numeric"
+          maxLength={10}
           value={phone}
-          style={styles.inputtext}
-          onChangeText={item => item.length == 10 && setPhone(item)}
+          style={[
+            styles.inputtext,
+            {borderColor: phone?.length == 10 ? 'green' : 'red'},
+          ]}
+          onChangeText={item => setPhone(item)}
         />
       </View>
 
@@ -150,7 +169,7 @@ const Details = ({navigation, route}) => {
           alignSelf: 'center',
           padding: 11,
           top: 35,
-          borderColor:'green'
+          borderColor: 'green',
         }}>
         {loading ? (
           <ActivityIndicator />
@@ -176,7 +195,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 15,
-    backgroundColor:'gray'
+    backgroundColor: 'gray',
   },
   image: {
     width: 400,
@@ -192,7 +211,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 19,
     fontWeight: '700',
-    color: 'red'
+    color: 'red',
   },
   inputtext: {
     borderWidth: 1,

@@ -16,7 +16,6 @@ const Home = ({navigation}) => {
   const [alldata, setAllData] = useState([]);
   const [offset, setOffset] = useState(0);
 
-  console.log('all', alldata?.length == 45);
   // helper
   useEffect(() => {
     getImages();
@@ -61,10 +60,6 @@ const Home = ({navigation}) => {
   // helper
   const renderFooter = () => {
     return (
-      // {
-      alldata?.length == 45 ? (
-        <></>
-      ) : (
         <TouchableOpacity
           style={styles.loadmore}
           onPress={() => handleLoadMore()}>
@@ -76,8 +71,6 @@ const Home = ({navigation}) => {
             Click here to load more
           </Text>
         </TouchableOpacity>
-      )
-      // }
     );
   };
 
